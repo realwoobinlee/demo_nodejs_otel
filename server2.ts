@@ -16,7 +16,8 @@ const spanProcessor = new SimpleSpanProcessor(consoleExporter);
 provider.addSpanProcessor(spanProcessor);
 */
 
-const exporterOptions = {
+const exporterOptions: ExporterConfig = {
+    url: process.env.ZIPKIN_URL,
     serviceName: ServiceName,
     headers:{}
 }
@@ -33,6 +34,7 @@ import express from "express";
 import opentelemetry from "@opentelemetry/api";
 import { request } from "http";
 import Axios from "axios";
+import { ExporterConfig } from "@opentelemetry/exporter-zipkin/build/src/types";
 
 const PORT = "8081";
 
@@ -48,6 +50,7 @@ Server.app.get("/product", async (req: express.Request,res: express.Response) =>
 });
 
 Server.app.get("/user", async (req: express.Request,res: express.Response) => {
+    console.log(req.headers);
     const context = opentelemetry.trace.getTracer('logform').getCurrentSpan().context();
     console.log(
         `TraceId: ${context.traceId}\nSpanId: ${context.spanId}\nlog: this is the log text`

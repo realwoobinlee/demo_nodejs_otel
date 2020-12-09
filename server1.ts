@@ -6,6 +6,8 @@ import {SimpleSpanProcessor, ConsoleSpanExporter} from "@opentelemetry/tracing";
 import { NodeTracerProvider } from "@opentelemetry/node";
 import { ZipkinExporter } from "@opentelemetry/exporter-zipkin";
 import { LogLevel, ConsoleLogger } from "@opentelemetry/core";
+import dotenv from "dotenv";
+dotenv.config();
 
 const provider = new NodeTracerProvider({
     logLevel: LogLevel.INFO
@@ -16,7 +18,8 @@ const spanProcessor = new SimpleSpanProcessor(consoleExporter);
 provider.addSpanProcessor(spanProcessor);
 */
 
-const exporterOptions = {
+const exporterOptions: ExporterConfig = {
+    url: process.env.ZIPKIN_URL,
     serviceName: ServiceName,
     headers:{}
 }
@@ -32,6 +35,7 @@ import { ApplicationSetup } from "./config";
 import express from "express";
 import opentelemetry from "@opentelemetry/api";
 import axios from "axios";
+import { ExporterConfig } from "@opentelemetry/exporter-zipkin/build/src/types";
 
 const PORT = "8080";
 
